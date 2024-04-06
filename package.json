@@ -1,13 +1,11 @@
 {
-  "name": "organiser",
+  "name": "organizer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "build": "cd client && npm install && npm run build"
+    "start": "node server/index.js"
   },
   "author": "",
   "license": "ISC",
