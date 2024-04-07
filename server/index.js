@@ -6,7 +6,9 @@ const cors = require("cors");
 
 const app = express();
 
-const port = process.env.PORT || 5000;
+const port = keys.nodePort || 5000;
+
+console.log("Environment: ", keys.environment);
 
 app.use(cors());
 app.use(bodyParser.json());
