@@ -14,29 +14,29 @@ function ToDoList() {
       } catch (error) {
         console.log(error);
       }
-    });
+    }, []);
   
     const addItem = useCallback(async (inputText) => {
       try {
-        const response = await axios.post("api/todo", { item: inputText });
+        await axios.post("api/todo", { item: inputText });
         getItems();
       } catch (error) {
         console.log(error);
       }
-    });
+    }, [getItems]);
   
     const deleteItem = useCallback(async (id) => {
       try {
-        const response = await axios.delete(`api/todo/${id}`);
+        await axios.delete(`api/todo/${id}`);
         getItems();
       } catch (error) {
         console.log(error);
       }
-    });
+    }, [getItems]);
   
     useEffect(() => {
       getItems();
-    }, []);
+    }, [getItems]);
   
     return (
       <div className="container">
