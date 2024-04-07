@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: 'postgres:latest'
+    env_file:
+      - ./dev.env
+
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: './server'
+    volumes:
+      - ./server:/app:ro
+    env_file:
+      - ./dev.env
+    ports:
+      - '5000:5000'
+
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: './client'
+    volumes:
+      - ./client/src:/app/src:ro
+    env_file:
+      - ./dev.env
+    ports:
+      - '3000:3000'

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: 'postgres:latest'
+    env_file:
+      - ./prod.env
+
+  backend:
+    build:
+      dockerfile: Dockerfile.prod
+      context: './server'
+    env_file:
+      - ./prod.env
+
+  client:
+    build:
+      dockerfile: Dockerfile.prod
+      context: './client'
+    env_file:
+      - ./prod.env
