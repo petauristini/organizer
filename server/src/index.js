@@ -47,7 +47,7 @@ const createTables = async () => {
     "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, username VARCHAR(100) NOT NULL UNIQUE, email VARCHAR(100) NOT NULL UNIQUE, password VARCHAR(100) NOT NULL);"
   );
   await db.query(
-    "CREATE TABLE IF NOT EXISTS todo (id SERIAL PRIMARY KEY, item VARCHAR(50) NOT NULL, user_id INTEGER REFERENCES users(id) NOT NULL)"
+    "CREATE TABLE IF NOT EXISTS todo (id SERIAL PRIMARY KEY, item VARCHAR(50) NOT NULL, type VARCHAR(10) NOT NULL, user_id INTEGER REFERENCES users(id) NOT NULL)"
   );
 };
 
@@ -87,7 +87,7 @@ app.get("/api/todo", async (req, res) => {
   if (req.isAuthenticated()) {
     getUserByEmail(req.user.email).then(async (user) => {
       try {
-        const response = await db.query("SELECT * FROM todo WHERE user_id=$1", [user.id]);
+        const response = await db.query("SELECT * FROM todo WHERE user_id=$1 AND type=$2", [user.id, req.query.type]);
         const todo = response.rows;
         if (response) res.status(200).send(todo);
       } catch (error) {
@@ -105,7 +105,8 @@ app.post("/api/todo", async (req, res) => {
     getUserByEmail(req.user.email).then(async (user) => {
       try {
         const newToDo = req.body.item;
-        await db.query("INSERT INTO todo (item, user_id) VALUES($1, $2)", [newToDo, user.id]);
+        await db.query("INSERT INTO todo (item, type, user_id) VALUES($1, $2, $3)", [newToDo, req.body.type, user.id]);
+        console.log(newToDo);
         res.status(200).send(newToDo);
       } catch (error) {
         res.status(500).send("Error");
@@ -149,30 +150,32 @@ app.post("/api/register", async (req, res) => {
     ]);
 
     if (checkResult.rows.length > 0) {
-      res.send("Email already exists. Try logging in.");
+      res.status(409).send("Email already exists. Try logging in.");
     } else {
       //hashing the password and saving it in the database
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
+      const hash = await bcrypt.hash(password, saltRounds);
+      console.log("Hashed Password:", hash);
+      const result = await db.query(
+        "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
+        [username, email, hash]
+      );
+      const user = result.rows[0];
+      console.log("User After registration", user);
+      req.login(user, (err) => {
         if (err) {
-          console.error("Error hashing password:", err);
+          console.error("Error logging in user:", err);
+          res.status(500).send("Error logging in user");
         } else {
-          console.log("Hashed Password:", hash);
-          const result = await db.query(
-            "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
-            [username, email, hash]
-          );
-          const user = result.rows[0];
-          req.login(user, (err) => {
-            console.log(err);
-            res.redirect("/todo");
-          });
+          res.status(200).send("User registered and logged in successfully");
         }
       });
     }
   } catch (err) {
-    console.log(err);
+    console.error("Error registering user:", err);
+    res.status(500).send("Error registering user");
   }
 });
+
 
 app.post(
   "/api/login",

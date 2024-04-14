@@ -1,13 +1,42 @@
 body {
   background-color: #B95CF4;
-  min-height: 70vh;
-  padding: 1rem;
-  box-sizing: border-box;
+  color: white;
+  font-family: "Architects Daughter", cursive;
+  font-size: 130%;
+}
+
+header {
+  position: fixed; 
+  left: 0; 
+  top: 0; 
+  width: 100%;
+  height: 10%;
+  background-color: #AAEAAA;
+  padding: 16px 32px; 
+  text-align: center;
+}
+
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.main-container {
+  position: absolute;
+  top: 10%;
+  bottom: 2rem; 
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
-  font-family: "Architects Daughter", cursive;
-  text-align: center;
-  font-size: 130%;
 }

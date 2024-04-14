@@ -27,6 +27,7 @@ function LoginRegister(props) {
     try {
       await axios.post((props.role === "Login") ? "/api/login" : "/api/register", { username: credentials.username, email: credentials.email, password: credentials.password });
       navigate("/");
+      console.log("navigate to main page");
     } catch (error) {
       console.log(error);
     }

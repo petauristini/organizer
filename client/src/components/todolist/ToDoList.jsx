@@ -5,30 +5,32 @@ import InputArea from "./InputArea";
 import axios from "axios";
 import "./ToDoList.css";
 
-function ToDoList() {
+function ToDoList(props) {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
 
   const getItems = useCallback(async () => {
     try {
-      const response = await axios.get("api/todo");
+      const response = await axios.get("api/todo", {
+        params: { type: props.type },
+      });
       setItems(response.data);
     } catch (error) {
       navigate("/login");
       console.log(error);
     }
-  }, [navigate]);
+  }, [navigate, props.type]);
 
   const addItem = useCallback(
     async (inputText) => {
       try {
-        await axios.post("api/todo", { item: inputText });
+        await axios.post("api/todo", { item: inputText, type: props.type });
         getItems();
       } catch (error) {
         console.log(error);
       }
     },
-    [getItems]
+    [getItems, props.type]
   );
 
   const deleteItem = useCallback(
@@ -50,7 +52,7 @@ function ToDoList() {
   return (
     <div className="container">
       <div className="heading">
-        <h1>To-Do List</h1>
+        <h1>{props.type} To-Do List</h1>
       </div>
       <InputArea addItem={addItem} />
       <div>
