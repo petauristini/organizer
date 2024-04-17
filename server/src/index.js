@@ -14,7 +14,6 @@ const port = keys.nodePort || 5000;
 const saltRounds = keys.saltRounds || 10;
 
 console.log("Environment: ", keys.environment);
-console.log(keys);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -141,6 +140,11 @@ app.post("/api/register", async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
+
+  if (!username || !email || !password) {
+    res.status(400).send("Missing required fields");
+    return;
+  }
 
   console.log("User: ", username, "Email: ", email, "Password: ", password);
 

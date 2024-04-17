@@ -11,6 +11,8 @@ services:
     build:
       dockerfile: Dockerfile.prod
       context: './server'
+    depends_on:
+      - postgres
     env_file:
       - ./prod.env
 
