@@ -71,7 +71,7 @@ const getUserByUsername = async (username) => {
 }
 
 app.get("/api", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World!, This is the organizer!");
 });
 
 app.get("/api/check-auth", (req, res) => {
