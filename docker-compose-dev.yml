@@ -6,24 +6,8 @@ services:
     image: 'postgres:latest'
     env_file:
       - ./dev.env
-
-  pgadmin:
-    image: dpage/pgadmin4
-    env_file:
-      - ./dev.env
-    ports:
-      - '5050:80'
-    depends_on:
-      - postgres
-
-    #------------------------------------------------------------------------
-    # Original author: matschik
-    # Repository: https://github.com/matschik/docker-compose-postgres-pgadmin
-    user: root
-    volumes:
-      - ./pgAdmin/entrypoint.sh:/entrypoint_custom.sh
-    entrypoint: /entrypoint_custom.sh
-    #------------------------------------------------------------------------
+    ports: 
+      - '7000:5432'
 
   backend:
     build:
