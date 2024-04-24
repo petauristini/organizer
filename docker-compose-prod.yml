@@ -2,23 +2,41 @@ version: '3.8'
 
 services:
 
+  nginx:
+    depends_on:
+      - backend
+      - client
+    restart: always
+    image: logiverum/organizer:nginx
+    ports:
+      - '3050:80'
+
   postgres:
     image: 'postgres:latest'
     env_file:
-      - ./prod.env
+      - ./.env
 
   backend:
-    build:
-      dockerfile: Dockerfile.prod
-      context: './server'
+    image: logiverum/organizer:server
+    restart: always
     depends_on:
       - postgres
     env_file:
-      - ./prod.env
+      - ./.env
 
   client:
-    build:
-      dockerfile: Dockerfile.prod
-      context: './client'
+    image: logiverum/organizer:client
+    restart: always
+    depends_on:
+      - postgres
     env_file:
-      - ./prod.env
+      - ./.env
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    environment:
+      - WATCHTOWER_CLEANUP=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 client backend nginx
