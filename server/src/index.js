@@ -115,14 +115,6 @@ app.post("/api/todo", async (req, res) => {
   } else {
     res.status(401).send("Unauthorized");
   }
-  // try {
-  //   const newToDo = req.body.item;
-  //   await db.query("INSERT INTO todo(item) VALUES($1)", [newToDo]);
-  //   res.status(200).send(newToDo);
-  // } catch (error) {
-  //   res.status(500).send("Error");
-  //   console.log(error);
-  // }
 });
 
 app.delete("/api/todo/:id", async (req, res) => {
