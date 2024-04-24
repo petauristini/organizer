@@ -39,8 +39,8 @@ jobs:
           push: true
           tags: logiverum/organizer:server
 
-      - name: build and push reverse-proxy
-        id: build-push-reverse-proxy
+      - name: build and push nginx
+        id: build-push-nginx
         uses: docker/build-push-action@v3
         with:
           context: ./nginx
