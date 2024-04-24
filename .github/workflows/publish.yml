@@ -21,8 +21,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      - name: build and push api
-        id: build-push-api
+      - name: build and push client
+        id: build-push-client
         uses: docker/build-push-action@v3
         with:
           context: ./client
@@ -30,8 +30,8 @@ jobs:
           push: true
           tags: logiverum/organizer:client
 
-      - name: build and push api
-        id: build-push-api
+      - name: build and push backend
+        id: build-push-backend
         uses: docker/build-push-action@v3
         with:
           context: ./server
